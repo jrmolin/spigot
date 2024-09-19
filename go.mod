@@ -1,4 +1,4 @@
-module github.com/leehinman/spigot
+module github.com/elastic/spigot
 
 go 1.22.5
 

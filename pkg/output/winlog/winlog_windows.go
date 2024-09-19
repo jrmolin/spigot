@@ -33,7 +33,7 @@ import (
 	"github.com/andrewkroh/sys/windows/svc/eventlog"
 	"github.com/elastic/beats/v7/winlogbeat/sys/wineventlog"
 	"github.com/elastic/go-ucfg"
-	"github.com/leehinman/spigot/pkg/output"
+	"github.com/elastic/spigot/pkg/output"
 	"go.uber.org/multierr"
 )
 

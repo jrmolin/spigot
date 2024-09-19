@@ -5,5 +5,5 @@
 package include
 
 import (
-	_ "github.com/leehinman/spigot/pkg/output/syslog"
+	_ "github.com/elastic/spigot/pkg/output/syslog"
 )
