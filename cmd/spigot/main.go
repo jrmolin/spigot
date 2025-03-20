@@ -7,7 +7,7 @@ import (
 
 	"github.com/elastic/go-ucfg"
 	"github.com/elastic/go-ucfg/yaml"
-	"github.com/leehinman/spigot/pkg/runner"
+	"github.com/elastic/spigot/pkg/runner"
 )
 
 type Config struct {

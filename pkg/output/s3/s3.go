@@ -32,7 +32,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/elastic/go-ucfg"
-	"github.com/leehinman/spigot/pkg/output"
+	"github.com/elastic/spigot/pkg/output"
 )
 
 // Name is the name used in the configuration file and the registry.
