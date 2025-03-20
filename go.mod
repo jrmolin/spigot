@@ -64,3 +64,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	howett.net/plist v1.0.0 // indirect
 )
+
+// Because we need to import Beats/v7 for the windows/stream hook there is a problem
+// and because of that we need to do the following replace directive, see https://github.com/elastic/beats/issues/21188
+replace github.com/Shopify/sarama => github.com/elastic/sarama v1.24.1-elastic
