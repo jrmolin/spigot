@@ -1,13 +1,14 @@
 
+[working-directory: 'cmd/spigot']
 build :
-    go build ./cmd/spigot
+    go build .
 
 [working-directory: 'examples/gotext']
 run : build
     rm -f /var/tmp/spigot_hotness*.log
-    ../../spigot -c ./gotext.yml
+    ../../cmd/spigot/spigot -c ./gotext.yml
 
 [working-directory: 'cmd/spigot']
 original : build
     rm -f /var/tmp/spigot_*.log
-    ../../spigot -c ./spigot.yml
+    ../../cmd/spigot/spigot -c ./spigot.yml
