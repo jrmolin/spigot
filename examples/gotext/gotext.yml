@@ -1,0 +1,15 @@
+---
+runners:
+  - generator:
+      type: "gotext"
+      subtype: "asa"
+      include_timestamp: false
+      file: "./asa.yml"
+    output:
+      type: file
+      directory: "/var/tmp"
+      pattern: "spigot_gotext_*.log"
+      delimiter: "\n"
+#    interval: 5s
+    records: 100
+

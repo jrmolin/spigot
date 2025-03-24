@@ -1,0 +1,187 @@
+name: "asa"
+formats:
+  - "id": "106023"
+    "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05\" .RewindValue}}: {{end}}%ASA-4-106023: Deny {{.Protocol | ToLower}} src {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} dst {{.DstInt}}:{{.DstAddr}}/{{.DstPort}} type {{RandomInt 64}} code {{RandomInt 64}} by {{.AccessGroup | ToLower}} \"{{.AclId}}\" [0x8ed66b60, 0xf8852875]"
+  - "id": "302013"
+    "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05\" \"10s\"}}: {{end}}%ASA-6-302013: Built {{.Direction}} TCP connection {{.ConnectionId}} for {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} ({{.Map1Addr}}/{{.Map1Port}}) to {{.DstInt}}:{{.DstAddr}}/{{.DstPort}} ({{.Map2Addr}}/{{.Map2Port}})"
+  - "id": "302014"
+    "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05\" \"10s\"}}: {{end}}%ASA-6-302014: Teardown TCP connection {{.ConnectionId}} for {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} to {{.DstInt}}:{{.DstAddr}}/{{.DstPort}} duration {{.Duration}} bytes {{RandomInt 65536}} {{.Reason}}"
+  - "id": "305011"
+    "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05.123\" \"10s\"}}: {{end}}%ASA-6-305011: Built {{.TranslationType}} {{.Protocol}} translation from {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} to {{.DstInt}}:{{.DstAddr}}/{{.DstPort}}"
+
+fields:
+  - name: AccessGroup
+    type: string
+    choices:
+      - "Access-Group"
+  - name: AclId
+    type: string
+    choices:
+      - "AclId"
+  - name: Bytes
+    type: int
+  - name: Code
+    type: int
+  - name: ConnectionId
+    type: int
+  - name: Direction
+    type: string
+    choices:
+      - "inbound"
+      - "outbound"
+  - name: DstAddr
+    type: ipv4
+  - name: DstInt
+    type: interface
+  - name: DstPort
+    type: port
+  - name: DstUser
+    type: string
+    choices:
+      - "DstUser"
+  - name: Duration
+    type: duration
+  - name: IncludeTimestamp
+    type: bool
+  - name: Map1Addr
+    type: ipv4
+  - name: Map1Port
+    type: port
+  - name: Map2Addr
+    type: ipv4
+  - name: Map2Port
+    type: port
+  - name: Protocol
+    type: string
+    choices:
+      - "TCP"
+      - "UDP"
+  - name: Reason
+    type: string
+    choices:
+      - "Conn-timeout"
+      - "Deny Terminate"
+      - "Failover primary closed"
+      - "FIN Timeout"
+      - "Flow closed by inspection"
+      - "Flow terminated by IPS"
+      - "Flow reset by IPS"
+      - "Flow terminated by TCP Intercept"
+      - "Flow timed out"
+      - "Flow timed out with reset"
+      - "Flow is a loopback"
+      - "Free the flow created as result of packet injection"
+      - "Invalid SYN"
+      - "IPS fail-close"
+      - "No interfaces associated with zone"
+      - "No valid adjacency"
+      - "Pinhole Timeout"
+      - "Probe maximum retries of retransmission exceeded"
+      - "Probe maximum retransmission time elapsed"
+      - "Probe received RST"
+      - "Probe received FIN"
+      - "Probe completed"
+      - "Route change"
+      - "SYN Control"
+      - "SYN Timeout"
+      - "TCP bad retransmission"
+      - "TCP FINs"
+      - "TCP Invalid SYN"
+      - "TCP Reset - APPLIANCE"
+      - "TCP Reset - I"
+      - "TCP Reset - O"
+      - "TCP segment partial overlap"
+      - "TCP unexpected window size variation"
+      - "Tunnel has been torn down"
+      - "Unauth Deny"
+      - "Unknown"
+      - "Xlate Clear"
+  - name: RewindValue
+    type: string
+    choices:
+      - "10s"
+      - "2h30m"
+  - name: SrcAddr
+    type: ipv4
+  - name: SrcInt
+    type: interface
+  - name: SrcPort
+    type: port
+  - name: SrcUser
+    type: string
+    choices:
+      - "SrcUser"
+  - name: Timestamp
+    type: time.Time
+  - name: TranslationType
+    type: string
+    choices:
+      - "dynamic"
+      - "static"
+  - name: Type
+    type: int
+
+# // New is Factory for the asa generator
+# func New(cfg *ucfg.Config) (generator.Generator, error) {
+# 	c := defaultConfig()
+# 	if err := cfg.Unpack(&c); err != nil {
+# 		return nil, err
+# 	}
+# 
+# 	a := &Asa{
+# 		IncludeTimestamp: c.IncludeTimestamp,
+# 	}
+# 	a.randomize()
+# 
+# 	for i, v := range msgTemplates {
+# 		t, err := template.New(strconv.Itoa(i)).Funcs(generator.FunctionMap).Parse(v)
+# 		if err != nil {
+# 			return nil, err
+# 		}
+# 		a.templates = append(a.templates, t)
+# 	}
+# 
+# 	return a, nil
+# }
+# 
+# // Next produces the next asa log entry
+# func (a *Asa) Next() ([]byte, error) {
+# 	var buf bytes.Buffer
+# 
+# 	err := a.templates[rand.Intn(len(a.templates))].Execute(&buf, a)
+# 	if err != nil {
+# 		return nil, err
+# 	}
+# 
+# 	a.randomize()
+# 
+# 	return buf.Bytes(), err
+# }
+# 
+# func (a *Asa) randomize() {
+# 	a.SrcInt = "SrcInt"
+# 	a.SrcUser = "SrcUser"
+# 	a.DstInt = "DstInt"
+# 	a.DstUser = "DstUser"
+# 	a.AccessGroup = "Access-Group"
+# 	a.AclId = "AclId"
+# 	a.Protocol = protocols[rand.Intn(len(protocols))]
+# 	a.TranslationType = translationTypes[rand.Intn(len(translationTypes))]
+# 	a.ConnectionId = rand.Intn(65536)
+# 	a.Duration = fmt.Sprintf("%01d:%02d:%02d", rand.Intn(4), rand.Intn(60), rand.Intn(60))
+# 	a.Bytes = rand.Intn(65536)
+# 	a.Reason = reasons[rand.Intn(len(reasons))]
+# 	a.SrcAddr = random.IPv4()
+# 	a.SrcPort = random.Port()
+# 	a.DstAddr = random.IPv4()
+# 	a.DstPort = random.Port()
+# 	a.Type = rand.Intn(64)
+# 	a.Code = rand.Intn(64)
+# 	a.Direction = directions[rand.Intn(len(directions))]
+# 	a.Map1Addr = random.IPv4()
+# 	a.Map1Port = random.Port()
+# 	a.Map2Addr = random.IPv4()
+# 	a.Map2Port = random.Port()
+# 	a.Timestamp = time.Now()
+# }
+# 

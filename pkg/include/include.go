@@ -10,6 +10,7 @@ import (
 	_ "github.com/leehinman/spigot/pkg/generator/citrix/cef"
 	_ "github.com/leehinman/spigot/pkg/generator/clf"
 	_ "github.com/leehinman/spigot/pkg/generator/fortinet/firewall"
+	_ "github.com/leehinman/spigot/pkg/generator/gotext"
 	_ "github.com/leehinman/spigot/pkg/generator/winlog"
 	_ "github.com/leehinman/spigot/pkg/output/file"
 	_ "github.com/leehinman/spigot/pkg/output/rally"
