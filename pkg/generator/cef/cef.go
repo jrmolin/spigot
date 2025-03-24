@@ -29,8 +29,8 @@ import (
 
 	"github.com/elastic/go-ucfg"
 	"github.com/google/uuid"
-	"github.com/leehinman/spigot/pkg/generator"
-	"github.com/leehinman/spigot/pkg/random"
+	"github.com/elastic/spigot/pkg/generator"
+	"github.com/elastic/spigot/pkg/random"
 )
 
 // Name is the name of the generator in the configuration file and registry

@@ -25,7 +25,7 @@ import (
 	"os"
 
 	"github.com/elastic/go-ucfg"
-	"github.com/leehinman/spigot/pkg/output"
+	"github.com/elastic/spigot/pkg/output"
 )
 
 // Name is the name of the output in the configuration file and registry

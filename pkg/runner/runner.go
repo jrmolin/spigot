@@ -32,9 +32,9 @@ import (
 	"time"
 
 	"github.com/elastic/go-ucfg"
-	"github.com/leehinman/spigot/pkg/generator"
-	_ "github.com/leehinman/spigot/pkg/include"
-	"github.com/leehinman/spigot/pkg/output"
+	"github.com/elastic/spigot/pkg/generator"
+	_ "github.com/elastic/spigot/pkg/include"
+	"github.com/elastic/spigot/pkg/output"
 )
 
 // Runner holds the config, output and generator.

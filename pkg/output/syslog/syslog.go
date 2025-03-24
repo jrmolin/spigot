@@ -22,7 +22,7 @@ import (
 	"net"
 
 	"github.com/elastic/go-ucfg"
-	"github.com/leehinman/spigot/pkg/output"
+	"github.com/elastic/spigot/pkg/output"
 )
 
 // Name is the name used in the configuration file and the registry.
