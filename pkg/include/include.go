@@ -10,6 +10,7 @@ import (
 	_ "github.com/elastic/spigot/pkg/generator/citrix/cef"
 	_ "github.com/elastic/spigot/pkg/generator/clf"
 	_ "github.com/elastic/spigot/pkg/generator/fortinet/firewall"
+	_ "github.com/elastic/spigot/pkg/generator/gotext"
 	_ "github.com/elastic/spigot/pkg/generator/winlog"
 	_ "github.com/elastic/spigot/pkg/output/file"
 	_ "github.com/elastic/spigot/pkg/output/rally"
