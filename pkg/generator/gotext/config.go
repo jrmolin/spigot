@@ -12,7 +12,6 @@ import (
 type config struct {
 	Type string `config:"type" validate:"required"`
 	File string `config:"file" validate:"required"`
-	Subtype string `config:"subtype" validate:"required"`
 }
 
 type format struct {

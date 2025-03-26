@@ -42,8 +42,6 @@ var (
 func TimestampFormatter(format, whence string) string {
 	now := time.Now()
 
-	then := now
-
 	dur,err := time.ParseDuration(whence)
 	if err != nil {
 		fmt.Println("failed to parse [", whence, "] with error::", err)
@@ -57,11 +55,7 @@ func TimestampFormatter(format, whence string) string {
 		} else {
 			dur = newdur
 		}
-		then = now.Add(dur)
 	}
-
-	// whence is the amount of time to rewind
-	fmt.Println("rewinding up to ", whence, "(", dur, ") from", now.Format(format), " yields", then.Format(format))
 
 	return now.Format(format)
 }
