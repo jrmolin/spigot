@@ -11,7 +11,7 @@ import (
 
 type config struct {
 	Type string `config:"type" validate:"required"`
-	File string `config:"file" validate:"required"`
+	Config generator_config `config:"config" validate:"required"`
 }
 
 type format struct {
@@ -27,7 +27,6 @@ type Field struct {
 
 type generator_config struct {
 	Name string `config:"name" validate:"required"`
-	IncludeTimestamp bool `config:"include_timestamp"`
 	Formats []*format `config:"formats"`
 	Fields []Field `config:"fields"`
 }
@@ -35,7 +34,7 @@ type generator_config struct {
 func defaultConfig() config {
 	return config{
 		Type: Name,
-		File: "/does/not/exist.yml",
+		Config: generator_config{},
 	}
 }
 

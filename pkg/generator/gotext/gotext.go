@@ -18,7 +18,6 @@ import (
 	"time"
 
 	"github.com/elastic/go-ucfg"
-	"github.com/elastic/go-ucfg/yaml"
 	"github.com/elastic/spigot/pkg/generator"
 	"github.com/elastic/spigot/pkg/random"
 )
@@ -55,6 +54,35 @@ func TimestampFormatter(format, whence string) string {
 		} else {
 			dur = newdur
 		}
+		now = now.Add(dur)
+	}
+
+	// this format is seconds.[1-9]
+	if strings.HasPrefix(format, "seconds") {
+		secs := now.Unix()
+
+		result := strings.Split(format, ".")
+		if len(result) > 1 {
+			// generate a random number of nanos
+			nanos := rand.Intn(1_000_000_000)
+			partialsString := fmt.Sprintf("%09d", nanos)
+
+			// figure out what precision to output
+			precision := 6
+			if prec, err := strconv.Atoi(result[1]); err == nil {
+				switch prec {
+				case 0:
+					return fmt.Sprintf("%d", secs)
+				case 1, 2, 3, 4, 5, 6, 7, 8, 9:
+					precision = prec
+				default:
+					precision = 9
+				}
+			}
+			return fmt.Sprintf("%d.%s", secs, partialsString[0:precision])
+		} else {
+			return fmt.Sprintf("%d", secs)
+		}
 	}
 
 	return now.Format(format)
@@ -88,7 +116,6 @@ type Template struct {
 
 type GoText struct {
 	Name string
-	IncludeTimestamp bool
 	Fields []Field
 	templates []Template
 }
@@ -125,24 +152,12 @@ func New(cfg *ucfg.Config) (generator.Generator, error) {
 		return nil, err
 	}
 
-	// read in the file
-	gc := generator_config{}
-	cfg, err := yaml.NewConfigWithFile(c.File, ucfg.PathSep("."))
-	if err != nil {
-		panic(err)
-	}
-
-	// unpack the file
-	err = cfg.Unpack(&gc)
-	if err != nil {
-		panic(err)
-	}
+	gc := c.Config
 
 	// check variables
 	// return
 	g := &GoText{
 		Name: gc.Name,
-		IncludeTimestamp: gc.IncludeTimestamp,
 		Fields: gc.Fields,
 		templates: nil,
 	}
