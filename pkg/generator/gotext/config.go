@@ -11,7 +11,7 @@ import (
 
 type config struct {
 	Type string `config:"type" validate:"required"`
-	Config generator_config `config:"config" validate:"required"`
+	Config GeneratorConfig `config:"config" validate:"required"`
 }
 
 type format struct {
@@ -25,7 +25,7 @@ type Field struct {
 	Choices []string `config:"choices"`
 }
 
-type generator_config struct {
+type GeneratorConfig struct {
 	Name string `config:"name" validate:"required"`
 	Formats []*format `config:"formats"`
 	Fields []Field `config:"fields"`
@@ -34,7 +34,7 @@ type generator_config struct {
 func defaultConfig() config {
 	return config{
 		Type: Name,
-		Config: generator_config{},
+		Config: GeneratorConfig{},
 	}
 }
 
