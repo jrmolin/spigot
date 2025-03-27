@@ -9,7 +9,7 @@ x-extra: &gotext
     - "id": "302014"
       "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05\" .RewindValue}}: {{end}}%ASA-6-302014: Teardown TCP connection {{.ConnectionId}} for {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} to {{.DstInt}}:{{.DstAddr}}/{{.DstPort}} duration {{.Duration}} bytes {{RandomInt 65536}} {{.Reason}}"
     - "id": "305011"
-      "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05.123\" .RewindValue}}: {{end}}%ASA-6-305011: Built {{.TranslationType}} {{.Protocol}} translation from {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} to {{.DstInt}}:{{.DstAddr}}/{{.DstPort}}"
+      "value": "{{if .IncludeTimestamp}}{{TimestampFormatter \"Jan 02 2006 03:04:05.999\" .RewindValue}}: {{end}}%ASA-6-305011: Built {{.TranslationType}} {{.Protocol}} translation from {{.SrcInt}}:{{.SrcAddr}}/{{.SrcPort}} to {{.DstInt}}:{{.DstAddr}}/{{.DstPort}}"
 
   fields:
     - name: AccessGroup

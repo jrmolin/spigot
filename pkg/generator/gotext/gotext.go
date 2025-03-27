@@ -61,6 +61,7 @@ func TimestampFormatter(format, whence string) string {
 	if strings.HasPrefix(format, "seconds") {
 		secs := now.Unix()
 
+		returnVal := fmt.Sprintf("%d", secs)
 		result := strings.Split(format, ".")
 		if len(result) > 1 {
 			// generate a random number of nanos
@@ -79,10 +80,10 @@ func TimestampFormatter(format, whence string) string {
 					precision = 9
 				}
 			}
-			return fmt.Sprintf("%d.%s", secs, partialsString[0:precision])
-		} else {
-			return fmt.Sprintf("%d", secs)
+			returnVal = fmt.Sprintf("%d.%s", secs, partialsString[0:precision])
 		}
+		// return early
+		return returnVal
 	}
 
 	return now.Format(format)
