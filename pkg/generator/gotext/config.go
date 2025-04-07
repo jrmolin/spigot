@@ -49,7 +49,10 @@ func (c *config) Validate() error {
 func (f *Field) randomize() any {
 	// if there are choices, select one at random
 	if f.Choices != nil {
-		return f.Choices[rand.Intn(len(f.Choices))]
+		count := len(f.Choices)
+		if count > 0 {
+			return f.Choices[rand.Intn(count)]
+		}
 	}
 
 	// if there is a random definition, use that

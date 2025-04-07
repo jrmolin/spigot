@@ -1,3 +1,4 @@
 /cmd/spigot/spigot
+/examples/gotext/spigot
 justfile
 Makefile
