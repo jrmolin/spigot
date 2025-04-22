@@ -14,21 +14,17 @@ type config struct {
 	Config GeneratorConfig `config:"config" validate:"required"`
 }
 
-type format struct {
-	Id string `config:"id" validate:"required"`
-	Value string `config:"value" validate:"required"`
-}
-
-type Field struct {
+type GcField struct {
 	Name string `config:"name"`
 	Type string `config:"type"`
 	Choices []string `config:"choices"`
+	Template *string `config:"tpl"`
 }
 
 type GeneratorConfig struct {
 	Name string `config:"name" validate:"required"`
-	Formats []*format `config:"formats"`
-	Fields []Field `config:"fields"`
+	Formats []*string `config:"formats"`
+	Fields []GcField `config:"fields"`
 }
 
 func defaultConfig() config {
@@ -54,6 +50,9 @@ func (f *Field) randomize() any {
 			return f.Choices[rand.Intn(count)]
 		}
 	}
+
+	// if there is a template, process that
+
 
 	// if there is a random definition, use that
 	switch f.Type {

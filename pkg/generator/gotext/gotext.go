@@ -115,6 +115,13 @@ type Template struct {
 	Tpl *template.Template
 }
 
+type Field struct {
+	Name string `config:"name"`
+	Type string `config:"type"`
+	Choices []string `config:"choices"`
+	template *Template
+}
+
 type GoText struct {
 	Name string
 	Fields []Field
@@ -130,7 +137,17 @@ func (g *GoText) Next() ([]byte, error) {
 
 	// loop over each field
 	for _, f := range g.Fields {
-		object[f.Name] = f.randomize()
+		if f.template != nil {
+			err := f.template.Tpl.Execute(&buf, object)
+			if err != nil {
+				log.Fatal("Failed to execute template", f.template.Format, "with error", err)
+				return nil, err
+			}
+
+			object[f.Name] = buf.Bytes()
+		} else {
+			object[f.Name] = f.randomize()
+		}
 	}
 
 	// are there formats?
@@ -159,17 +176,39 @@ func New(cfg *ucfg.Config) (generator.Generator, error) {
 	// return
 	g := &GoText{
 		Name: gc.Name,
-		Fields: gc.Fields,
+		Fields: nil,
 		templates: nil,
 	}
 
+	for i, v := range gc.Fields {
+		f := Field{
+			Name: v.Name,
+			Type: v.Type,
+			Choices: v.Choices,
+		}
+
+		// if there is a Template field
+		if v.Template != nil {
+			t, err := template.New(strconv.Itoa(i)).Funcs(FunctionMap).Parse(*v.Template)
+			if err != nil {
+				return nil, err
+			}
+
+			f.template = &Template{
+				Format: *v.Template,
+				Tpl: t,
+			}
+		}
+		g.Fields = append(g.Fields, f)
+	}
+
 	for i, v := range gc.Formats {
-		t, err := template.New(strconv.Itoa(i)).Funcs(FunctionMap).Parse(v.Value)
+		t, err := template.New(strconv.Itoa(i)).Funcs(FunctionMap).Parse(*v)
 		if err != nil {
 			return nil, err
 		}
 		g.templates = append(g.templates, Template{
-			Format: v.Value,
+			Format: *v,
 			Tpl: t,
 		})
 	}
