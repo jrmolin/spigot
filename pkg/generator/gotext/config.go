@@ -1,8 +1,11 @@
 package gotext
 
 import (
+	"bytes"
 	"fmt"
+	"log"
 	"math/rand"
+	"reflect"
 
 	"strconv"
 
@@ -42,7 +45,55 @@ func (c *config) Validate() error {
 	return nil
 }
 
-func (f *Field) randomize() any {
+func (f *Field) getType() reflect.Type {
+	switch f.Type {
+	case "Port", "port":
+		var p int
+		return reflect.TypeOf(p)
+	// case "time.Time":
+	// 	return string
+	// case "Duration", "duration":
+	// 	return string
+	default:
+	}
+
+	// otherwise, return the type as a string
+	var p string
+	return reflect.TypeOf(p)
+
+}
+
+func (f *Field) convert(in bytes.Buffer) any {
+
+	switch f.Type {
+	case "Port", "port", "int":
+		asString := string(in.Bytes())
+		asInt, err := strconv.Atoi(asString)
+		if err != nil {
+			log.Fatal("Could not convert %v to int: %v\n", in, err)
+			return nil
+		}
+		return asInt
+	default:
+	}
+	return string(in.Bytes())
+}
+
+func (f *Field) randomize(object map[string]any) any {
+	var buf bytes.Buffer
+
+	// if there is a template, process that
+	if f.template != nil {
+		err := f.template.Tpl.Execute(&buf, object)
+		if err != nil {
+			log.Fatal("Failed to execute template", f.template.Format, "with error", err)
+			return f.Type
+		}
+
+		// need to convert this to the type
+		return f.convert(buf)
+	}
+
 	// if there are choices, select one at random
 	if f.Choices != nil {
 		count := len(f.Choices)
@@ -50,9 +101,6 @@ func (f *Field) randomize() any {
 			return f.Choices[rand.Intn(count)]
 		}
 	}
-
-	// if there is a template, process that
-
 
 	// if there is a random definition, use that
 	switch f.Type {

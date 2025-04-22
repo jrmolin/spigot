@@ -45,12 +45,8 @@ x-extra: &gotext
         - true
     - name: Map1Addr
       type: ipv4
-    - name: Map1Port
-      type: port
     - name: Map2Addr
       type: ipv4
-    - name: Map2Port
-      type: port
     - name: Protocol
       type: string
       choices:
@@ -107,6 +103,12 @@ x-extra: &gotext
       type: interface
     - name: SrcPort
       type: port
+    - name: Map1Port
+      type: port
+      tpl: "{{ .SrcPort }}"
+    - name: Map2Port
+      type: port
+      tpl: "{{ .DstPort }}"
     - name: SrcUser
       type: string
       choices:

@@ -137,17 +137,7 @@ func (g *GoText) Next() ([]byte, error) {
 
 	// loop over each field
 	for _, f := range g.Fields {
-		if f.template != nil {
-			err := f.template.Tpl.Execute(&buf, object)
-			if err != nil {
-				log.Fatal("Failed to execute template", f.template.Format, "with error", err)
-				return nil, err
-			}
-
-			object[f.Name] = buf.Bytes()
-		} else {
-			object[f.Name] = f.randomize()
-		}
+		object[f.Name] = f.randomize(object)
 	}
 
 	// are there formats?
