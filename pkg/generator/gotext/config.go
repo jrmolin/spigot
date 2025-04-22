@@ -104,6 +104,8 @@ func (f *Field) randomize(object map[string]any) any {
 
 	// if there is a random definition, use that
 	switch f.Type {
+	case "int":
+		return RandomInt(65535)
 	case "IPv4", "IP", "ipv4":
 		return RandomIPv4()
 	case "Port", "port":
