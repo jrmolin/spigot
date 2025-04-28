@@ -105,7 +105,7 @@ x-extra: &gotext
       type: port
     - name: Map1Port
       type: port
-      tpl: "{{ .SrcPort }}"
+      tpl: "{{ RandomInt 20 | PlusInt .SrcPort }}"
     - name: Map2Port
       type: port
       tpl: "{{ .DstPort }}"

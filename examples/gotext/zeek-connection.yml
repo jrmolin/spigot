@@ -1,0 +1,80 @@
+x-connection: &connection
+  name: "zeek-connection"
+  formats:
+    - "{\"ts\":{{TimestampFormatter \"seconds.6\" .RewindValue}},\"uid\":\"CAcJw21BbVedgFnYH3\",\"id.orig_h\":\"{{ .InternalIp192 }}\",\"id.orig_p\":{{ .SrcPort }},\"id.resp_h\":\"{{ .InternalIp10 }}\",\"id.resp_p\":53,\"proto\":\"udp\",\"service\":\"dns\",\"duration\":0.076967,\"orig_bytes\":{{ .OrigBytes }},\"resp_bytes\":{{ .RespBytes }},\"conn_state\":\"SF\",\"local_orig\":true,\"local_resp\":true,\"missed_bytes\":0,\"history\":\"Dd\",\"orig_pkts\":{{ .OrigPkts }},\"orig_ip_bytes\":{{ .OrigIpBytes }},\"resp_pkts\":{{ .RespPkts }},\"resp_ip_bytes\":{{ .RespIpBytes }},\"tunnel_parents\":[]}"
+    - "{\"ts\":{{TimestampFormatter \"seconds.6\" .RewindValue}},\"uid\":\"CAcJw21BbVedgFnYH3\",\"id.orig_h\":\"{{ .InternalIp192 }}\",\"id.orig_p\":{{ .SrcPort }},\"id.resp_h\":\"{{ .InternalIp10 }}\",\"id.resp_p\":53,\"proto\":\"udp\",\"service\":\"dns\",\"duration\":0.076967,\"orig_bytes\":{{ .OrigBytes }},\"resp_bytes\":{{ .RespBytes }},\"conn_state\":\"SF\",\"local_orig\":true,\"local_resp\":true,\"missed_bytes\":0,\"history\":\"Dd\",\"orig_pkts\":{{ .OrigPkts }},\"orig_ip_bytes\":{{ .OrigIpBytes }},\"resp_pkts\":{{ .RespPkts }},\"resp_ip_bytes\":{{ .RespIpBytes }},\"tunnel_parents\":[],\"acks\":{{ .Acks }},\"gaps\":{{ .Gaps }},\"blah\":\"yeah\"}"
+
+  fields:
+    - name: Name
+      type: string
+      choices:
+        - Herbert
+        - Nick
+        - Cyndi
+        - zeek
+        - bro
+    - name: RewindValue
+      type: string
+      choices:
+        - "10s"
+        - "20m"
+    - name: OrigPkts
+      tpl: '{{ RandomInt 100 }}'
+    - name: OrigBytes
+      tpl: '{{ RandomInt 1000 | TimesInt .OrigPkts }}'
+    - name: OrigIpPkts
+      tpl: '{{ RandomInt 100 | TimesInt .OrigPkts }}'
+    - name: OrigIpBytes
+      tpl: '{{ RandomInt 1000 | TimesInt .OrigIpPkts }}'
+    - name: RespPkts
+      tpl: '{{ RandomInt 100 }}'
+    - name: RespBytes
+      tpl: '{{ RandomInt 1000 | TimesInt .RespPkts }}'
+    - name: RespIpPkts
+      tpl: '{{ RandomInt 100 | TimesInt .RespPkts }}'
+    - name: RespIpBytes
+      tpl: '{{ RandomInt 1000 | TimesInt .RespIpPkts }}'
+    - name: InternalIp192
+      type: string
+      tpl: '192.168.{{ RandomInt 255 }}.{{ RandomInt 200 | PlusInt 1 }}' # goofy way of chaining function calls
+    - name: InternalIp10
+      type: string
+      tpl: '10.{{ RandomInt 200 }}.{{ RandomInt 255 }}.{{ RandomInt 200 | PlusInt 1 }}' # goofy way of chaining function calls
+    - name: SrcIp
+      type: ipv4
+    - name: DstIp
+      type: ipv4
+
+    - name: Acks
+      type: int
+      tpl: '{{ RandomInt 100000 }}'
+
+    - name: Gaps
+      type: int
+      tpl: '{{ RandomInt .Acks }}'
+
+    - name: SrcPort
+      type: port
+
+    - name: Intf
+      type: interface
+
+    - name: Protocol
+      type: string
+      choices:
+        - TCP
+        - UDP
+
+runners:
+  - generator:
+      type: "gotext"
+      config: *connection
+
+    output:
+      type: file
+      directory: "/var/tmp"
+      pattern: "spigot_zeek_*.log"
+      delimiter: "\n"
+#    interval: 5s
+    records: 20000
+
