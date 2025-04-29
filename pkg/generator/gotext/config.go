@@ -1,8 +1,11 @@
 package gotext
 
 import (
+	"bytes"
 	"fmt"
+	"log"
 	"math/rand"
+	"reflect"
 
 	"strconv"
 
@@ -11,32 +14,26 @@ import (
 
 type config struct {
 	Type string `config:"type" validate:"required"`
-	File string `config:"file" validate:"required"`
-	Subtype string `config:"subtype" validate:"required"`
+	Config GeneratorConfig `config:"config" validate:"required"`
 }
 
-type format struct {
-	Id string `config:"id" validate:"required"`
-	Value string `config:"value" validate:"required"`
-}
-
-type Field struct {
+type GcField struct {
 	Name string `config:"name"`
 	Type string `config:"type"`
 	Choices []string `config:"choices"`
+	Template *string `config:"tpl"`
 }
 
-type generator_config struct {
+type GeneratorConfig struct {
 	Name string `config:"name" validate:"required"`
-	IncludeTimestamp bool `config:"include_timestamp"`
-	Formats []*format `config:"formats"`
-	Fields []Field `config:"fields"`
+	Formats []*string `config:"formats"`
+	Fields []GcField `config:"fields"`
 }
 
 func defaultConfig() config {
 	return config{
 		Type: Name,
-		File: "/does/not/exist.yml",
+		Config: GeneratorConfig{},
 	}
 }
 
@@ -48,14 +45,67 @@ func (c *config) Validate() error {
 	return nil
 }
 
-func (f *Field) randomize() any {
+func (f *Field) getType() reflect.Type {
+	switch f.Type {
+	case "Port", "port":
+		var p int
+		return reflect.TypeOf(p)
+	// case "time.Time":
+	// 	return string
+	// case "Duration", "duration":
+	// 	return string
+	default:
+	}
+
+	// otherwise, return the type as a string
+	var p string
+	return reflect.TypeOf(p)
+
+}
+
+func (f *Field) convert(in bytes.Buffer) any {
+
+	switch f.Type {
+	case "Port", "port", "int":
+		asString := string(in.Bytes())
+		asInt, err := strconv.Atoi(asString)
+		if err != nil {
+			log.Fatal("Could not convert %v to int: %v\n", in, err)
+			return nil
+		}
+		return asInt
+	default:
+	}
+	return string(in.Bytes())
+}
+
+func (f *Field) randomize(object map[string]any) any {
+	var buf bytes.Buffer
+
+	// if there is a template, process that
+	if f.template != nil {
+		err := f.template.Tpl.Execute(&buf, object)
+		if err != nil {
+			log.Fatal("Failed to execute template", f.template.Format, "with error", err)
+			return f.Type
+		}
+
+		// need to convert this to the type
+		return f.convert(buf)
+	}
+
 	// if there are choices, select one at random
 	if f.Choices != nil {
-		return f.Choices[rand.Intn(len(f.Choices))]
+		count := len(f.Choices)
+		if count > 0 {
+			return f.Choices[rand.Intn(count)]
+		}
 	}
 
 	// if there is a random definition, use that
 	switch f.Type {
+	case "int":
+		return RandomInt(65535)
 	case "IPv4", "IP", "ipv4":
 		return RandomIPv4()
 	case "Port", "port":
