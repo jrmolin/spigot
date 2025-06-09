@@ -13,26 +13,26 @@ import (
 )
 
 type config struct {
-	Type string `config:"type" validate:"required"`
+	Type   string          `config:"type" validate:"required"`
 	Config GeneratorConfig `config:"config" validate:"required"`
 }
 
 type GcField struct {
-	Name string `config:"name"`
-	Type string `config:"type"`
-	Choices []string `config:"choices"`
-	Template *string `config:"tpl"`
+	Name     string   `config:"name"`
+	Type     string   `config:"type"`
+	Choices  []string `config:"choices"`
+	Template *string  `config:"tpl"`
 }
 
 type GeneratorConfig struct {
-	Name string `config:"name" validate:"required"`
+	Name    string    `config:"name" validate:"required"`
 	Formats []*string `config:"formats"`
-	Fields []GcField `config:"fields"`
+	Fields  []GcField `config:"fields"`
 }
 
 func defaultConfig() config {
 	return config{
-		Type: Name,
+		Type:   Name,
 		Config: GeneratorConfig{},
 	}
 }

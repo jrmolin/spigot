@@ -2,17 +2,16 @@
 //
 // Configuration file supports including timestamps in log messages
 //
-//   generator:
-//     type: "generic:cef"
-//     max_extensions: 20
-//	   vendors: ["VaporCorp", ...]
-//	   products: ["VaporWare"]
-//	   versions: ["0.1", "0.1-alpha"]
-//	   classes: ["APPSS"]
-//	   names: ["APPSS_UL", "APPSS_LTUL"]
-//     must_include: ["src", "spt", "dst", "dpt",...]
-//     must_exclude: ["art",...]
-//
+//	  generator:
+//	    type: "generic:cef"
+//	    max_extensions: 20
+//		   vendors: ["VaporCorp", ...]
+//		   products: ["VaporWare"]
+//		   versions: ["0.1", "0.1-alpha"]
+//		   classes: ["APPSS"]
+//		   names: ["APPSS_UL", "APPSS_LTUL"]
+//	    must_include: ["src", "spt", "dst", "dpt",...]
+//	    must_exclude: ["art",...]
 package cef
 
 import (
@@ -28,9 +27,9 @@ import (
 	"time"
 
 	"github.com/elastic/go-ucfg"
-	"github.com/google/uuid"
 	"github.com/elastic/spigot/pkg/generator"
 	"github.com/elastic/spigot/pkg/random"
+	"github.com/google/uuid"
 )
 
 // Name is the name of the generator in the configuration file and registry
@@ -63,7 +62,7 @@ func init() {
 }
 
 // New returns a new CEF log line generator.
-func New(cfg *ucfg.Config) (generator.Generator, error) {
+func New(cfg *ucfg.Config, _ int64) (generator.Generator, error) {
 	config := defaultConfig()
 	if err := cfg.Unpack(&config); err != nil {
 		return nil, err
@@ -206,12 +205,12 @@ var extensions []string
 
 // extensionMapping is a mapping of CEF key names to full field names and data
 // types. This mapping was generated from tables contained in:
-// - "Micro Focus Security ArcSight Common Event Format Version 25"
-//   dated September 28, 2017.
-// - "Check Point Log Exporter CEF Field Mappings"
-//   dated November 23, 2018.
-// - "HPE Security ArcSight Common Event Format Version 23"
-//   dated May 16, 2016.
+//   - "Micro Focus Security ArcSight Common Event Format Version 25"
+//     dated September 28, 2017.
+//   - "Check Point Log Exporter CEF Field Mappings"
+//     dated November 23, 2018.
+//   - "HPE Security ArcSight Common Event Format Version 23"
+//     dated May 16, 2016.
 var extensionMapping = map[string]mappedField{
 	"agt": {
 		Target: "agentAddress",
@@ -849,11 +848,11 @@ var extensionMapping = map[string]mappedField{
 	},
 	"spt": {
 		Target: "sourcePort",
-		Value:  func(c config) fmt.Stringer { return integerValue{min: 0, max: 65535} },
+		Value:  func(c config) fmt.Stringer { return integerValue{0, 65535} },
 	},
 	"spid": {
 		Target: "sourceProcessId",
-		Value:  func(c config) fmt.Stringer { return integerValue{min: 0, max: 65535} },
+		Value:  func(c config) fmt.Stringer { return integerValue{0, 65535} },
 	},
 	"sproc": {
 		Target: "sourceProcessName",
@@ -869,7 +868,7 @@ var extensionMapping = map[string]mappedField{
 	},
 	"sourceTranslatedPort": {
 		Target: "sourceTranslatedPort",
-		Value:  func(c config) fmt.Stringer { return integerValue{min: 0, max: 65535} },
+		Value:  func(c config) fmt.Stringer { return integerValue{0, 65535} },
 	},
 	"sourceTranslatedZoneExternalID": {
 		Target: "sourceTranslatedZoneExternalID",

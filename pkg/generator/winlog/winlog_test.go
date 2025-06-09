@@ -44,8 +44,8 @@ func readGoldenFile(t *testing.T, filename string, expected []byte, update bool)
 }
 
 // Update golden files by running:
-//     go test ./pkg/generator/winlog -update
 //
+//	go test ./pkg/generator/winlog -update
 func TestGenerator_Next(t *testing.T) {
 	tests := map[string]struct {
 		config       map[string]interface{}
