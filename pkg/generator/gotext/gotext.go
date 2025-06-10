@@ -189,7 +189,7 @@ func (g *GoText) Next() ([]byte, error) {
 	// are there formats?
 	if len(g.templates) < 1 {
 		fmt.Printf("i am %v; %v\n", g.Name, g.templates)
-		return nil, fmt.Errorf("This has no templates to process; bailing")
+		return nil, fmt.Errorf("this has no templates to process; bailing")
 	}
 	index := rand.Intn(len(g.templates))
 
