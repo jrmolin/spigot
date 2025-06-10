@@ -70,7 +70,7 @@ func (f *Field) convert(in bytes.Buffer) any {
 		asString := string(in.Bytes())
 		asInt, err := strconv.Atoi(asString)
 		if err != nil {
-			log.Fatal("Could not convert %v to int: %v\n", in, err)
+			log.Fatalf("Could not convert %v to int: %v\n", in, err)
 			return nil
 		}
 		return asInt

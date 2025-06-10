@@ -94,7 +94,7 @@ func ToIntWithDefault(input any, defaultValue int) int {
 	case string:
 		result, err := strconv.Atoi(v)
 		if err != nil {
-			log.Fatal("Could not convert %v (%T) to int: %v\n", input, input, err)
+			log.Fatalf("Could not convert %v (%T) to int: %v\n", input, input, err)
 			return 1
 		}
 		return result

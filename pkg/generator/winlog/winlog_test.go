@@ -88,7 +88,7 @@ func TestGenerator_Next(t *testing.T) {
 			serviceSIDMap = map[string]string{}
 			userSIDMap = map[string]string{}
 
-			g, err := New(ucfg.MustNewFrom(tc.config))
+			g, err := New(ucfg.MustNewFrom(tc.config), 0)
 			assert.NoError(t, err)
 
 			g.(*Generator).staticTime = &testTime

@@ -848,11 +848,11 @@ var extensionMapping = map[string]mappedField{
 	},
 	"spt": {
 		Target: "sourcePort",
-		Value:  func(c config) fmt.Stringer { return integerValue{0, 65535} },
+		Value:  func(c config) fmt.Stringer { return integerValue{min: 0, max: 65535} },
 	},
 	"spid": {
 		Target: "sourceProcessId",
-		Value:  func(c config) fmt.Stringer { return integerValue{0, 65535} },
+		Value:  func(c config) fmt.Stringer { return integerValue{min: 0, max: 65535} },
 	},
 	"sproc": {
 		Target: "sourceProcessName",
@@ -868,7 +868,7 @@ var extensionMapping = map[string]mappedField{
 	},
 	"sourceTranslatedPort": {
 		Target: "sourceTranslatedPort",
-		Value:  func(c config) fmt.Stringer { return integerValue{0, 65535} },
+		Value:  func(c config) fmt.Stringer { return integerValue{min: 0, max: 65535} },
 	},
 	"sourceTranslatedZoneExternalID": {
 		Target: "sourceTranslatedZoneExternalID",
